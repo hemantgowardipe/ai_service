@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from dotenv import load_dotenv
 from pathlib import Path
+from datetime import timedelta
 
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -51,9 +52,9 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -139,10 +140,46 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Allow specific trusted origins
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",  # local React dev
-    "https://uapp.cse25.tech",  # your deployed frontend (if you have one)
+    "http://localhost:5173",           # Local Vite Dev Server
+    "https://uapp.cse25.tech",         # Your deployed frontend domain
 ]
 
+# Allow common request types
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
+
+# Allow headers needed for auth and JSON
+CORS_ALLOW_HEADERS = [
+    "authorization",
+    "content-type",
+    "accept",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
+]
+
+# Allow cookies or credentials if you ever use session-based auth
 CORS_ALLOW_CREDENTIALS = True
 
+# (Optional) Debug mode for CORS
+CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
+
+# Allow all origins temporarily (for debugging only)
+# CORS_ALLOW_ALL_ORIGINS = True  # Uncomment if you face issues
+# BASE_DIR is usually defined at the top of settings.py like:
+# BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# This tells Django where to collect static files (CSS, JS, etc.)
+# when you run: python manage.py collectstatic
