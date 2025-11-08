@@ -1,22 +1,10 @@
-# --- Build tools ---
-pip==25.2
-setuptools==75.0.0
-wheel==0.43.0
-
-# --- Django core ---
 Django==5.0.6
 djangorestframework==3.15.1
-gunicorn==21.2.0
-
-# --- Utilities ---
 requests==2.32.3
 python-dotenv==1.0.1
 PyJWT==2.9.0
-
-# --- AI + Data ---
-google-generativeai==0.8.3
-PyMuPDF==1.26.6
-
-# --- Supabase (fixed proxy bug) ---
 supabase==1.0.3
 httpx==0.23.3
+PyMuPDF==1.26.6
+google-generativeai==0.8.3
+gunicorn==21.2.0
