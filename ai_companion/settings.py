@@ -27,7 +27,13 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "fallback-key")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", "True") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    'ai-service-h0lx.onrender.com',
+    'uapp.cse25.tech',
+]
+
 
 
 # Application definition
