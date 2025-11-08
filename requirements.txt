@@ -5,6 +5,6 @@ python-dotenv==1.0.1
 PyJWT==2.9.0
 supabase==2.3.5
 httpx==0.25.2
-PyMuPDF==1.26.6 --only-binary=:all:
+PyMuPDF==1.26.6
 google-generativeai==0.8.3
 gunicorn==21.2.0
