@@ -7,4 +7,5 @@ urlpatterns = [
     path('projects/<str:project_id>/', views.get_project_context_view),
     path('projects/<str:project_id>/summary/', views.summarize_project_view),
     path('projects/<str:project_id>/ask/', views.ask_project_question_view),
+    path("redis-test/", views.redis_test),
 ]

@@ -1,44 +1,30 @@
-# ==============================
-# 🐍 1️⃣ Base image — stable, small, and fast
-# ==============================
+# Set Python version (Render default is 3.11, compatible with our packages)
 FROM python:3.11-slim
 
-# Prevent .pyc files and enable clean logging
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Set working directory inside container
+# Set app directory
 WORKDIR /app
 
-# Copy project files into the container
-COPY . /app/
+# Prevent Python from buffering output
+ENV PYTHONUNBUFFERED=1
 
-# ==============================
-# ⚙️ 2️⃣ Install required system packages
-# ==============================
-# Includes build tools and libraries needed by PyMuPDF, tesseract, etc.
+# Install system dependencies (required for PyMuPDF)
 RUN apt-get update && apt-get install -y \
     build-essential \
-    libpoppler-cpp-dev \
-    tesseract-ocr \
-    libtesseract-dev \
-    pkg-config \
+    zlib1g-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# ==============================
-# 📦 3️⃣ Install Python dependencies
-# ==============================
-# Upgrade pip & install all dependencies
+# Install dependencies
+COPY requirements.txt /app/
 RUN pip install --upgrade pip setuptools wheel
 RUN pip install --no-cache-dir -r requirements.txt
 
-# ==============================
-# 🌍 4️⃣ Expose port and environment
-# ==============================
-EXPOSE 10000
-ENV PORT=10000
+# Copy project files
+COPY . /app/
 
-# ==============================
-# 🚀 5️⃣ Start the Django app using Gunicorn
-# ==============================
+# Expose port Render expects
+EXPOSE 10000
+
+# Run app using gunicorn
 CMD ["gunicorn", "ai_companion.wsgi:application", "--bind", "0.0.0.0:10000"]
