@@ -132,8 +132,8 @@ flowchart TD
 Bachelor of Engineering (CSE) · Nagpur, India  
 Driven by a passion for AI, full-stack development & scalable systems.
 
-📧 Contact: <!-- Add your email here if preferred -->  
-🔗 [LinkedIn](#)  
+📧 Contact: hemantgowardipe442@gmail.com 
+🔗 [LinkedIn](https://www.linkedin.com/in/hemant-gowardipe-96614b24a/)  
 
 ---
 
