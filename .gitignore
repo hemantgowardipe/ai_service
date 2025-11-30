@@ -20,3 +20,9 @@ Thumbs.db
 *.log
 *.sqlite3
 __pycache__/
+
+# Performance / Load testing
+load_test.js
+k6/
+tests/
+*.k6.js
