@@ -141,13 +141,13 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # CORS Configuration
-CORS_ALLOW_ALL_ORIGINS = False  # Disable for production, enable only for debugging
+# CORS_ALLOW_ALL_ORIGINS = False  # Disable for production, enable only for debugging
 
 # Allow specific trusted origins
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",           # Local Vite Dev Server
     "https://uapp.cse25.tech",         # Your deployed frontend domain
-    "http://127.0.0.1:5173",          # Localhost with IP
+    "http://127.0.0.1:8000",          # Localhost with IP
 ]
 
 # Allow common request types

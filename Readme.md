@@ -1,4 +1,4 @@
-# 🧠 AI Academic Project Companion
+# 🧞‍♂️ AI Service – RAG-based AI Companion
 
 [![Performance Tested with k6](https://img.shields.io/badge/k6-loaded-brightgreen)](https://github.com/grafana/k6)
 [![Deployed on Render](https://img.shields.io/badge/render-cloud-blue)](https://render.com)
@@ -6,71 +6,53 @@
 [![Redis Caching (Upstash)](https://img.shields.io/badge/cache-redis-success)](https://upstash.com)
 [![Supabase Database](https://img.shields.io/badge/Database-Supabase-3bc477)](https://supabase.com)
 
-A production-grade platform leveraging state-of-the-art AI to parse, summarize, and interact with academic projects—built for scalable, real-time educational workflows.
+---
+
+## 🚀 Overview
+
+**AI Companion** is a premium RAG-based AI agent designed to deliver intelligent, context-aware answers to project-specific queries. Deployed on Render Cloud, it combines the power of Gemini 1.5 Flash LLM and blazing-fast Redis caching (Upstash), backed by a scalable Supabase database. Performance and concurrency have been thoroughly load tested to ensure reliability for real-world usage.
 
 ---
 
-## 🧰 Tech Stack
+## ✨ Key Features
 
-| Component             | Technology                                    |
-|-----------------------|-----------------------------------------------|
-| **AI Model**          | Google Gemini 2.5 Flash                       |
-| **Backend**           | Django REST Framework                         |
-| **Frontend**          | React · Vite · Tailwind CSS                   |
-| **AI Cache Layer**    | Redis (Upstash)                               |
-| **Database/Storage**  | Supabase PostgreSQL                           |
-| **PDF Parsing**       | PyMuPDF                                       |
-| **Deployment**        | Docker · Render                               |
-| **Version Control**   | GitHub                                        |
+- **Gemini 1.5 Flash API:** Lightning-fast, cost-effective generative AI.
+- **RAG (Retrieval-Augmented Generation):** Precise, context-rich answers.
+- **Supabase Database:** Modern, scalable backend for project data.
+- **Redis (Upstash) Caching:** Sub-second retrieval for repeated queries.
+- **JWT Authentication:** Secure, production-ready API access.
 
 ---
 
-## 📡 API Usage Example
+## 🏁 Getting Started
 
-### 🔍 Querying the AI (GET)
+### 1. API Endpoint
 
-**Endpoint:**  
 ```
-GET /api/ai/projects/<project_id>/ask?q=<your_question>
+GET /api/ai/projects/:id/ask?q=<question>
 ```
+- **Authentication:** JWT Bearer Token required
+- **Response:** Intelligent answer, with context
 
-**Response Example:**
-```json
-{
-  "project_title": "Unified Academic Projects Portal",
-  "question": "what is project summary?",
-  "answer": "The Unified Academic Project Portal (UAPP) is a centralized web-based platform..."
-}
-```
+### 2. Example Request
 
----
-
-## 🗄 Required Environment Variables (`.env`)
-
-```env
-SUPABASE_URL=your_supabase_url
-SUPABASE_KEY=your_supabase_key
-GOOGLE_API_KEY=your_gemini_key
-REDIS_URL=your_upstash_redis_url
-REDIS_TOKEN=your_upstash_redis_token
+```bash
+curl -H "Authorization: Bearer {YOUR_JWT_TOKEN}" \
+     "https://ai-service-h0lx.onrender.com/api/ai/projects/68d509597520d838528cb390/ask/?q=Future%20prediction%20of%20this%20project"
 ```
 
 ---
 
-## 🐳 Docker-Based Deployment
+## 🛠️ Tech Stack
 
-**To Build:**
-```sh
-docker build -t ai-companion .
-```
-
-**To Run:**
-```sh
-docker run -p 8000:8000 ai-companion
-```
-
-**API is available at:**  
-`http://localhost:8000`
+| Layer         | Technology          |
+|---------------|--------------------|
+| API           | Node.js/Express    |
+| LLM           | Gemini 1.5 Flash   |
+| Database      | Supabase           |
+| Caching       | Redis (Upstash)    |
+| Auth          | JWT                |
+| Deployment    | Render Cloud       |
 
 ---
 
@@ -114,6 +96,13 @@ export default function () {
 | 20                | 55       | 5.90s        | 7.70s  | 7.85s  | 56.3%        | 48       |
 | 50                | 115      | 13.73s       | 16.97s | 17.73s | 52.1%        | 110      |
 
+
+<p align="center">
+  <img src="assets/performance.png" alt="k6 performance chart" width="720" />
+</p>
+
+*Figure: k6 performance chart (cached vs first-run response times)*
+
 ---
 
 ## 🧠 Insights & Observations
@@ -138,84 +127,35 @@ export default function () {
 
 ---
 
-## 🧠 Redis AI Caching Strategy
+## 🏆 Why Choose AI Service?
 
-| Key Format                   | TTL  | Description                                 |
-|------------------------------|------|---------------------------------------------|
-| `project_context:<id>`       | 24h  | PDF text extracted & cached for fast reuse  |
-| `ai_answer:<id>:<question>`  | 30m  | Cached AI responses for lightning replies    |
-
-**Example Key:**  
-`ai_answer:68ecb1…:what is summary?` → Returns answer in milliseconds
-
-**Typical Logging Output:**
-- 📌 `Redis MISS - Extracting PDF`
-- 📦 `Supabase saved`
-- 💾 `Redis Save 24h context`
-- 🤖 `Redis HIT - Returning cached answer`
+- **Premium architecture** for real-world reliability
+- **Scalable, modular design** to extend features easily
+- **Optimized for speed** via caching and fast LLM inference
+- **Developer friendly:** Clean API, strong authentication
+- **Battle-tested performance:** k6-certified
 
 ---
 
-## 🧪 API Testing (Postman Example)
+## 🤝 Contributions
 
-```
-http://localhost:8000/api/ai/projects/68d509597520d838528cb390/ask?q=what is project summary?
-```
+We welcome PRs, issues, and suggestions! Please refer to our [Contributing Guidelines](CONTRIBUTING.md).
 
-**Expected Output:**  
-🤖 `Redis HIT - Answer from cache`
+## 📄 License
 
----
-
-## 🏗 Architecture Flow
-
-```mermaid
-flowchart TD
-    A[User Question] --> B[Redis Cache Check]
-    B -->|Hit| C[Return Cached Answer]
-    B -->|Miss| D[Supabase Context Check]
-    D -->|Found| E[Cache Context & Continue]
-    D -->|Not Found| F[Extract from PDF]
-    F --> G[Save in Supabase & Redis]
-    G --> H[Call Gemini AI]
-    H --> I[Store Answer in Redis]
-    I --> J[Return Response to Frontend]
-```
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
 
 ---
 
-## 🔮 Roadmap & Upcoming Features
+## 🌍 Links & Resources
 
-| Feature                     | Description                                         |
-|-----------------------------|-----------------------------------------------------|
-| 🎙 Voice-based interaction  | Ask questions via microphone                        |
-| 📎 Chat with full documents | Keep chat history across multiple PDFs              |
-| 🧪 AI evaluator mode        | Automated grading for project scorecards            |
-| 🌐 Multi-agent system       | Agents for research, evaluation & assistant roles   |
-| 📈 Streaming responses      | Real-time, token-based response streaming           |
-
----
-
-## 👨‍💻 Author & Maintainer
-
-**Hemant Gowaedipe**  
-Bachelor of Engineering (CSE) · Nagpur, India  
-Driven by a passion for AI, full-stack development & scalable systems.
-
-📧 Contact: hemantgowardipe442@gmail.com 
-🔗 [LinkedIn](https://www.linkedin.com/in/hemant-gowardipe-96614b24a/)  
+- [Live Demo](https://ai-service-h0lx.onrender.com)
+- [Documentation](docs/)
+- [Gemini 1.5 Flash API](https://ai.google.dev/gemini)
+- [Supabase](https://supabase.com)
+- [Upstash Redis](https://upstash.com)
+- [k6 Load Testing](https://k6.io)
 
 ---
 
-## 🪪 License
-
-Distributed under the [MIT License](LICENSE).
-
----
-
-## ⭐ Contributing
-
-If you find this project useful, please ⭐️ star the repo and contribute!  
-We welcome suggestions, improvements, and pull requests.
-
----
+*AI Service: Elevate your projects with an intelligent, reliable, production-grade companion.*
