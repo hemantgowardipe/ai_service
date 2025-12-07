@@ -2,7 +2,7 @@
 
 [![Performance Tested with k6](https://img.shields.io/badge/k6-loaded-brightgreen)](https://github.com/grafana/k6)
 [![Deployed on Render](https://img.shields.io/badge/render-cloud-blue)](https://render.com)
-[![Uses Gemini 1.5 Flash LLM](https://img.shields.io/badge/LLM-Gemini%201.5%20Flash-yellow)](https://ai.google.dev/gemini)
+[![Uses Gemini 2.5 Flash LLM](https://img.shields.io/badge/LLM-Gemini%201.5%20Flash-yellow)](https://ai.google.dev/gemini)
 [![Redis Caching (Upstash)](https://img.shields.io/badge/cache-redis-success)](https://upstash.com)
 [![Supabase Database](https://img.shields.io/badge/Database-Supabase-3bc477)](https://supabase.com)
 
