@@ -1,4 +1,6 @@
-import os, base64, fitz
+import os, base64
+import fitz  # PyMuPDF
+import requests
 import google.generativeai as genai
 from core.supabase_client import get_project_context, store_project_context
 from core.redis_client import redis_client   # <--- Add this
@@ -76,19 +78,30 @@ def summarize_project(project_id: str, question: str, project_title: str):
 
 
 def extract_text_from_pdf_field(project_data):
-    pdf_info = project_data.get("projectSummaryPdf")
-    if not pdf_info or not pdf_info.get("data"):
+    """
+    Extract PDF text from PDF URL given in project_data.
+    """
+    pdf_url = project_data.get("pdf_file")
+
+    if not pdf_url:
+        print("⚠️ No PDF URL found in project data.")
         return None
+
+    print("📄 Downloading PDF from:", pdf_url)
+
     try:
-        pdf_bytes = base64.b64decode(pdf_info["data"])
-        pdf_doc = fitz.open(stream=pdf_bytes, filetype="pdf")
-        text = ""
-        for page in pdf_doc:
-            text += page.get_text("text")
-        pdf_doc.close()
+        pdf_bytes = requests.get(pdf_url).content
+
+        with fitz.open(stream=pdf_bytes, filetype="pdf") as doc:
+            text = ""
+            for page in doc:
+                text += page.get_text()
+
+        print("✅ PDF Extraction Success")
         return text.strip()
+
     except Exception as e:
-        print(f"PDF Extraction Error: {e}")
+        print("❌ PDF extraction failed:", e)
         return None
 
 
@@ -111,6 +124,10 @@ def get_or_create_project_context(project_id: str, project_data: dict):
 
     print("📌 Supabase MISS - Extracting from PDF...")
     pdf_text = extract_text_from_pdf_field(project_data)
+    if pdf_text:
+        store_project_context(project_id, pdf_text)
+        redis_client.set(redis_key, pdf_text, ex=86400)
+        return pdf_text
 
     if pdf_text:
         store_project_context(project_id, pdf_text)

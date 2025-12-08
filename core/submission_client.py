@@ -13,7 +13,7 @@ def get_all_projects(token):
         url = f"{SUBMISSION_SERVICE_URL}/api/projects"
         headers = {"Authorization": f"Bearer {token}"}
         print("➡️ Fetching projects from:", url)  # debug
-        response = requests.get(url, headers=headers, timeout=10000)
+        response = requests.get(url, headers=headers, timeout=25)
 
         if response.status_code != 200:
             return None, JsonResponse(
